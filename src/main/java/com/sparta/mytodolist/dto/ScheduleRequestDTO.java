@@ -1,11 +1,13 @@
 package com.sparta.mytodolist.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Getter
-public class TodoRequestDTO {
+@Setter
+public class ScheduleRequestDTO {
 
     private String user;
     private String title;
@@ -13,7 +15,7 @@ public class TodoRequestDTO {
     private String content;
     private long password;
 
-    public TodoRequestDTO(String user, String title, Date date, String content, long password) {
+    public ScheduleRequestDTO(String user, String title, Date date, String content, long password) {
         this.user = user;
         this.title = title;
         this.date = date;
