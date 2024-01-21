@@ -15,7 +15,7 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Schedule {
+public class ScheduleEntity {
 
     @Id @GeneratedValue
     @Column(name = "id")
@@ -26,7 +26,7 @@ public class Schedule {
     private String content;
     private long password;
 
-    public Schedule(ScheduleRequestDTO scheduleRequestDTO) {
+    public ScheduleEntity(ScheduleRequestDTO scheduleRequestDTO) {
         this.title = scheduleRequestDTO.getTitle();
         this.user = scheduleRequestDTO.getUser();
         this.date = scheduleRequestDTO.getDate();

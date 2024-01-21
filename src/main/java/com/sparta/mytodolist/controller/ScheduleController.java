@@ -1,6 +1,6 @@
 package com.sparta.mytodolist.controller;
 
-import com.sparta.mytodolist.domain.Schedule;
+import com.sparta.mytodolist.domain.ScheduleEntity;
 import com.sparta.mytodolist.dto.ScheduleRequestDTO;
 import com.sparta.mytodolist.dto.ScheduleResponseDTO;
 import com.sparta.mytodolist.service.ScheduleService;
@@ -21,22 +21,23 @@ public class ScheduleController {
         scheduleService.saveTodo(scheduleRequestDTO);
     }
 
+    @GetMapping("/find/{id}")
+    public ScheduleResponseDTO findSchedule(@PathVariable Long id){
+        return scheduleService.findTodo(id);
+    }
+
     @GetMapping("/list")
     public List<ScheduleResponseDTO> getTodoList(){
-        List<Schedule> scheduleList = scheduleService.findAll();
-
-        return scheduleList.stream().map(ScheduleResponseDTO::new)
-                .toList();
+        return scheduleService.findAll();
     }
 
     @PutMapping("/update/{id}")
     public void updateTodo(@PathVariable Long id, @RequestBody ScheduleRequestDTO scheduleRequestDTO){
-        scheduleService.update(id, scheduleRequestDTO.getTitle(), scheduleRequestDTO.getUser(), scheduleRequestDTO.getContent());
+        scheduleService.update(id, scheduleRequestDTO);
     }
 
-    @DeleteMapping("/delete/{Id}")
-    public void deleteTodo(@PathVariable("Id") String Id){
-        Long id = Long.parseLong(Id);
-        scheduleService.deleteTodo(id);
+    @DeleteMapping("/delete/{id}")
+    public void deleteTodo(@PathVariable Long id, @RequestBody long password){
+        scheduleService.deleteTodo(id, password);
     }
 }

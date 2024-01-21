@@ -1,6 +1,8 @@
 package com.sparta.mytodolist.repository;
 
-import com.sparta.mytodolist.domain.Schedule;
+import com.sparta.mytodolist.domain.ScheduleEntity;
+import com.sparta.mytodolist.dto.ScheduleRequestDTO;
+import com.sparta.mytodolist.dto.ScheduleResponseDTO;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -13,29 +15,42 @@ public class ScheduleRepository {
 
     private final EntityManager em;
 
-    public void save(Schedule schedule){
-        if(schedule.getId() == null){
-            em.persist(schedule);
+    public void save(ScheduleRequestDTO scheduleRequestDTO){
+        ScheduleEntity scheduleEntity = new ScheduleEntity(scheduleRequestDTO);
+
+        if(scheduleEntity.getId() == null){
+            em.persist(scheduleEntity);
         } else{
-            em.merge(schedule);
+            em.merge(scheduleEntity);
+        }
+    }
+
+    public ScheduleResponseDTO findById(Long id){
+        ScheduleEntity scheduleEntity = em.find(ScheduleEntity.class, id);
+        return new ScheduleResponseDTO(scheduleEntity);
+    }
+
+    public List<ScheduleResponseDTO> findAll(){
+        List<ScheduleEntity> scheduleEntityList = em.createQuery("select m from ScheduleEntity m", ScheduleEntity.class).getResultList();
+        return scheduleEntityList.stream().map(ScheduleResponseDTO::new)
+                .toList();
+    }
+
+    public void update(Long id, ScheduleRequestDTO scheduleRequestDTO){
+        ScheduleEntity scheduleEntity = new ScheduleEntity(scheduleRequestDTO);
+        scheduleEntity.updateTodo(scheduleRequestDTO.getTitle(), scheduleRequestDTO.getUser(), scheduleRequestDTO.getContent());
+    }
+
+    public void delete(Long id, long password){
+        ScheduleEntity scheduleEntity = em.find(ScheduleEntity.class, id);
+
+        if(scheduleEntity.getPassword() != password){
+            System.out.println("비밀번호가 틀렸습니다.");
+            return;
         }
 
-    }
-
-    public Schedule findById(Long id){
-        return em.find(Schedule.class, id);
-    }
-
-    public List<Schedule> findAll(){
-        return em.createQuery("select m from Schedule m", Schedule.class)
-                .getResultList();
-    }
-
-    public void delete(Long id){
-        Schedule schedule = em.find(Schedule.class, id);
-
-        if(schedule != null){
-            em.remove(schedule);
+        if(scheduleEntity != null){
+            em.remove(scheduleEntity);
         }
     }
 }

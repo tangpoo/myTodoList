@@ -1,7 +1,8 @@
 package com.sparta.mytodolist.service;
 
-import com.sparta.mytodolist.domain.Schedule;
+import com.sparta.mytodolist.domain.ScheduleEntity;
 import com.sparta.mytodolist.dto.ScheduleRequestDTO;
+import com.sparta.mytodolist.dto.ScheduleResponseDTO;
 import com.sparta.mytodolist.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,33 +12,31 @@ import java.util.List;
 
 
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
+    @Transactional
     public void saveTodo(ScheduleRequestDTO scheduleRequestDTO){
-        Schedule schedule = new Schedule(scheduleRequestDTO);
-        scheduleRepository.save(schedule);
+        scheduleRepository.save(scheduleRequestDTO);
     }
 
-    @Transactional(readOnly = true)
-    public Schedule findTodo(Long id){
+    public ScheduleResponseDTO findTodo(Long id){
         return scheduleRepository.findById(id);
     }
 
-    @Transactional(readOnly = true)
-    public List<Schedule> findAll(){
+    public List<ScheduleResponseDTO> findAll(){
         return scheduleRepository.findAll();
     }
 
-    public void update(Long Id, String title, String user, String content){
-        Schedule schedule = scheduleRepository.findById(Id);
-        schedule.updateTodo(title, user, content);
+    @Transactional
+    public void update(Long Id, ScheduleRequestDTO scheduleRequestDTO){
+        scheduleRepository.update(Id, scheduleRequestDTO);
     }
 
-    public void deleteTodo(Long id){
-        scheduleRepository.delete(id);
+    @Transactional
+    public void deleteTodo(Long id, long password){
+        scheduleRepository.delete(id, password);
     }
 }
