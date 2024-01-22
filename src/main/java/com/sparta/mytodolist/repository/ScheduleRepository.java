@@ -37,7 +37,13 @@ public class ScheduleRepository {
     }
 
     public void update(Long id, ScheduleRequestDTO scheduleRequestDTO){
-        ScheduleEntity scheduleEntity = new ScheduleEntity(scheduleRequestDTO);
+        ScheduleEntity scheduleEntity = em.find(ScheduleEntity.class, id);
+
+        if(scheduleEntity.getPassword() != scheduleRequestDTO.getPassword()){
+            System.out.println("비밀번호가 틀렸습니다.");
+            return;
+        }
+
         scheduleEntity.updateTodo(scheduleRequestDTO.getTitle(), scheduleRequestDTO.getUser(), scheduleRequestDTO.getContent());
     }
 

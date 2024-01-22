@@ -5,6 +5,8 @@ import com.sparta.mytodolist.dto.ScheduleRequestDTO;
 import com.sparta.mytodolist.dto.ScheduleResponseDTO;
 import com.sparta.mytodolist.service.ScheduleService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,27 +19,32 @@ public class ScheduleController {
     private final ScheduleService scheduleService;
 
     @PostMapping("/new")
-    public void createTodo(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
+    public ResponseEntity<Void> createTodo(@RequestBody ScheduleRequestDTO scheduleRequestDTO) {
         scheduleService.saveTodo(scheduleRequestDTO);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @GetMapping("/find/{id}")
-    public ScheduleResponseDTO findSchedule(@PathVariable Long id){
-        return scheduleService.findTodo(id);
+    public ResponseEntity<ScheduleResponseDTO> findSchedule(@PathVariable Long id){
+        ScheduleResponseDTO schedule = scheduleService.findTodo(id);
+        return new ResponseEntity<>(schedule, HttpStatus.OK);
     }
 
     @GetMapping("/list")
-    public List<ScheduleResponseDTO> getTodoList(){
-        return scheduleService.findAll();
+    public ResponseEntity<List<ScheduleResponseDTO>> getTodoList(){
+        List<ScheduleResponseDTO> schedules = scheduleService.findAll();
+        return new ResponseEntity<>(schedules, HttpStatus.OK);
     }
 
     @PutMapping("/update/{id}")
-    public void updateTodo(@PathVariable Long id, @RequestBody ScheduleRequestDTO scheduleRequestDTO){
+    public ResponseEntity<Void> updateTodo(@PathVariable Long id, @RequestBody ScheduleRequestDTO scheduleRequestDTO){
         scheduleService.update(id, scheduleRequestDTO);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteTodo(@PathVariable Long id, @RequestBody long password){
+    public ResponseEntity<Void> deleteTodo(@PathVariable Long id, @RequestBody long password){
         scheduleService.deleteTodo(id, password);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
