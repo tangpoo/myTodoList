@@ -9,7 +9,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -22,14 +22,14 @@ public class ScheduleEntity {
     private Long id;
     private String title;
     private String user;
-    private Date date;
+    private LocalDateTime date;
     private String content;
     private long password;
 
     public ScheduleEntity(ScheduleRequestDTO scheduleRequestDTO) {
         this.title = scheduleRequestDTO.getTitle();
         this.user = scheduleRequestDTO.getUser();
-        this.date = scheduleRequestDTO.getDate();
+        this.date = LocalDateTime.now();
         this.content = scheduleRequestDTO.getContent();
         this.password = scheduleRequestDTO.getPassword();
     }

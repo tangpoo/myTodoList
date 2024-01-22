@@ -1,6 +1,5 @@
 package com.sparta.mytodolist.controller;
 
-import com.sparta.mytodolist.domain.ScheduleEntity;
 import com.sparta.mytodolist.dto.ScheduleRequestDTO;
 import com.sparta.mytodolist.dto.ScheduleResponseDTO;
 import com.sparta.mytodolist.service.ScheduleService;
